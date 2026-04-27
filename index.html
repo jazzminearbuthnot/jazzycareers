@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Jazzy Resumes — Executive Branding Suite</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f7f6f3;--surface:#fff;--s2:#f2f1ee;--border:#e2e0da;--b2:#ece9e2;
+  --text:#1a1a1a;--muted:#666;--hint:#999;--accent:#1a1a2e;--acl:#2d2d4e;
+  --purple:#C89BFF;--pbg:#f5eeff;
+  --green:#3b6d11;--gbg:#eaf3de;--red:#a32d2d;--rbg:#fcebeb;
+  --amber:#854f0b;--abg:#faeeda;--blue:#185fa5;--bbg:#e6f1fb;
+  --r:8px;--rl:12px;--font:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;--mono:"SF Mono","Fira Code",monospace;
+}
+body{font-family:var(--font);color:var(--text);background:var(--bg);min-height:100vh}
+.wrap{max-width:860px;margin:0 auto;padding:2rem 1.5rem 5rem}
+.hdr{display:flex;align-items:center;gap:12px;margin-bottom:2rem}
+.logo{width:40px;height:40px;background:var(--accent);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.logo svg{width:22px;height:22px}
+.hdr-title{font-size:18px;font-weight:600;letter-spacing:-.3px}
+.hdr-sub{font-size:12px;color:var(--muted);margin-top:1px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:1.25rem;margin-bottom:1rem}
+.card-title{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:1rem}
+label{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;display:block;margin-bottom:5px}
+.req{font-size:10px;background:var(--bbg);color:var(--blue);border-radius:3px;padding:1px 5px;margin-left:5px;font-weight:500;text-transform:none;letter-spacing:0}
+input[type=text],textarea{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:var(--r);padding:9px 11px;font-size:13px;font-family:var(--font);color:var(--text);outline:none;transition:border-color .15s}
+input[type=text]:focus,textarea:focus{border-color:#888;background:#fff}
+textarea{resize:vertical;min-height:90px;line-height:1.6}
+.field{margin-bottom:12px}.field:last-child{margin-bottom:0}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.phase-sel{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-bottom:1.25rem}
+.pb{padding:10px 6px;border:1px solid var(--border);border-radius:var(--r);background:var(--surface);cursor:pointer;text-align:center;transition:all .15s;font-family:var(--font)}
+.pb:hover{border-color:var(--accent);background:var(--s2)}
+.pb.sel{border-color:var(--accent);background:var(--accent);color:#fff}
+.pb.done{border-color:var(--green);background:var(--gbg);color:var(--green);cursor:default}
+.pb.running{border-color:var(--purple);background:var(--pbg)}
+.pb .pn{font-size:16px;font-weight:700;display:block;margin-bottom:3px}
+.pb .pl{font-size:10px;font-weight:500;display:block;line-height:1.3}
+.pb.sel .pl{color:rgba(255,255,255,.8)}
+.run-all{padding:10px;border:1px dashed var(--border);border-radius:var(--r);background:transparent;cursor:pointer;text-align:center;font-family:var(--font);color:var(--muted);font-size:11px;font-weight:600;transition:all .15s}
+.run-all:hover{border-color:var(--accent);color:var(--accent)}
+.btn-row{display:flex;gap:8px;margin-top:1rem;flex-wrap:wrap;align-items:center}
+button{padding:9px 18px;font-size:13px;font-weight:500;border:1px solid var(--border);border-radius:var(--r);background:var(--surface);color:var(--text);cursor:pointer;transition:all .12s;font-family:var(--font)}
+button:hover{background:var(--bg);border-color:#aaa}
+button.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+button.primary:hover{background:var(--acl)}
+button.success{background:var(--gbg);color:var(--green);border-color:var(--green)}
+button.success:hover{opacity:.85}
+button:disabled{opacity:.4;cursor:not-allowed}
+.spin{display:inline-block;width:12px;height:12px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:rot .7s linear infinite;vertical-align:middle;margin-right:5px}
+@keyframes rot{to{transform:rotate(360deg)}}
+.status{font-size:12px;padding:9px 13px;border-radius:var(--r);margin-bottom:1rem;display:none;line-height:1.5}
+.status.show{display:block}
+.status.info{background:var(--s2);color:var(--muted);border:1px solid var(--b2)}
+.status.err{background:var(--rbg);color:var(--red);border:1px solid #f0c0c0}
+.status.ok{background:var(--gbg);color:var(--green);border:1px solid #b8d98a}
+.status.warn{background:var(--abg);color:var(--amber);border:1px solid #f0d0a0}
+.phase-out{display:none}.phase-out.show{display:block}
+.pp{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);overflow:hidden;margin-bottom:1rem}
+.pp-hdr{padding:12px 16px;display:flex;align-items:center;gap:10px;background:var(--bg);border-bottom:1px solid var(--b2)}
+.pp-badge{width:28px;height:28px;background:var(--green);color:#fff;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
+.pp-title{font-size:14px;font-weight:600;flex:1}
+.pp-acts{display:flex;gap:6px}
+.pp-acts button{padding:5px 10px;font-size:11px}
+.pp-body{padding:1.25rem}
+.pp-body .sec{margin-bottom:1.1rem}.pp-body .sec:last-child{margin-bottom:0}
+.pp-body label{margin-bottom:4px;font-size:10px}
+.ef{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:var(--r);padding:9px 11px;font-size:13px;font-family:var(--font);color:var(--text);resize:vertical;outline:none;min-height:68px;line-height:1.6;transition:border-color .15s}
+.ef:focus{border-color:#888;background:#fff}
+.ef.single{min-height:38px;resize:none}
+.tabs{display:flex;border-bottom:1px solid var(--border);margin-bottom:1.5rem}
+.tab{padding:10px 18px;font-size:13px;font-weight:500;cursor:pointer;color:var(--muted);border-bottom:2px solid transparent;margin-bottom:-1px;transition:color .15s;background:none;border-top:none;border-left:none;border-right:none;font-family:var(--font)}
+.tab.active{color:var(--accent);border-bottom-color:var(--accent)}
+.tab:hover:not(.active){color:var(--text)}
+.panel{display:none}.panel.active{display:block}
+.db{border:1px solid var(--border);border-radius:var(--rl);overflow:hidden;margin-bottom:.75rem}
+.db-hdr{padding:10px 14px;display:flex;align-items:center;gap:10px;cursor:pointer;background:var(--bg)}
+.db-hdr:hover{background:var(--s2)}
+.di{width:24px;height:24px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0}
+.ir{background:var(--rbg);color:var(--red)}.ia{background:var(--abg);color:var(--amber)}
+.ig{background:var(--gbg);color:var(--green)}.ib{background:var(--bbg);color:var(--blue)}
+.db-title{font-size:13px;font-weight:600;flex:1}
+.chev{font-size:10px;color:var(--muted);transition:transform .2s}.chev.open{transform:rotate(180deg)}
+.db-body{padding:1rem;display:none;border-top:1px solid var(--b2)}.db-body.open{display:block}
+.db-body p{font-size:13px;line-height:1.7;margin-bottom:8px}.db-body p:last-child{margin-bottom:0}
+.cbox{background:var(--bg);border:1px solid var(--border);border-radius:var(--r);padding:10px 12px;font-family:var(--mono);font-size:11px;line-height:1.6;white-space:pre-wrap;word-break:break-all;margin:8px 0}
+.badge{display:inline-block;font-size:10px;padding:2px 7px;border-radius:3px;font-weight:600;margin-left:6px}
+.bc{background:var(--rbg);color:var(--red)}.bw{background:var(--abg);color:var(--amber)}
+.bi{background:var(--bbg);color:var(--blue)}.bg{background:var(--gbg);color:var(--green)}
+.sep{height:1px;background:var(--b2);margin:10px 0}
+.mono{font-family:var(--mono);font-size:12px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="hdr">
+  <div class="logo">
+    <svg viewBox="0 0 22 22" fill="none"><path d="M3 5.5h16M3 11h11M3 16.5h8" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/><circle cx="17.5" cy="14.5" r="3.2" stroke="#C89BFF" stroke-width="1.3"/><path d="M19.8 16.8l1.7 1.7" stroke="#C89BFF" stroke-width="1.3" stroke-linecap="round"/></svg>
+  </div>
+  <div>
+    <div class="hdr-title">Jazzy Resumes — Executive Branding Suite</div>
+    <div class="hdr-sub">VP → C-Suite | CCO / Chief of Staff Track</div>
+  </div>
+</div>
+
+<div class="tabs">
+  <button class="tab active" onclick="switchTab('kit',this)">Branding Kit</button>
+  <button class="tab" onclick="switchTab('debug',this)">Error Troubleshooter</button>
+</div>
+
+<!-- KIT PANEL -->
+<div id="panel-kit" class="panel active">
+  <div class="card">
+    <div class="card-title">Client Intake</div>
+    <div class="grid2">
+      <div class="field"><label>Client name</label><input type="text" id="kn" placeholder="e.g. Marcus T. Williams" /></div>
+      <div class="field"><label>Target positions <span class="req">required</span></label><input type="text" id="kr" placeholder="e.g. Chief Customer Officer, Chief of Staff" /></div>
+    </div>
+    <div class="field"><label>LinkedIn profile</label><textarea id="kl" placeholder="Paste About section, headline, experience bullets..."></textarea></div>
+    <div class="field"><label>Resume <span class="req">required</span></label><textarea id="km" placeholder="Paste full resume — work history, skills, achievements, education..." style="min-height:130px"></textarea></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Select phases to run — each generates a downloadable document</div>
+    <div class="phase-sel">
+      <div class="pb sel" id="pb-1" onclick="togglePhase('1')"><span class="pn">1</span><span class="pl">Narrative Foundation</span></div>
+      <div class="pb" id="pb-2" onclick="togglePhase('2')"><span class="pn">2</span><span class="pl">LinkedIn Refresh</span></div>
+      <div class="pb" id="pb-3" onclick="togglePhase('3')"><span class="pn">3</span><span class="pl">Visual Presence</span></div>
+      <div class="pb" id="pb-4" onclick="togglePhase('4')"><span class="pn">4</span><span class="pl">Search Strategy</span></div>
+      <div class="pb" id="pb-5" onclick="togglePhase('5')"><span class="pl">Supporting Assets</span><span class="pn" style="margin-top:2px">5</span></div>
+      <div class="run-all" onclick="selectAll()">▶ Run All<br>Phases</div>
+    </div>
+    <div class="btn-row">
+      <button class="primary" id="kbtn" onclick="runSelected()"><span id="kbtxt">Run selected phases</span></button>
+      <button onclick="resetAll()">Reset all</button>
+      <button onclick="copyAllCompleted()">Copy all</button>
+    </div>
+  </div>
+
+  <div class="status" id="kstatus"></div>
+  <div id="out-1" class="phase-out"></div>
+  <div id="out-2" class="phase-out"></div>
+  <div id="out-3" class="phase-out"></div>
+  <div id="out-4" class="phase-out"></div>
+  <div id="out-5" class="phase-out"></div>
+</div>
+
+<!-- DEBUG PANEL -->
+<div id="panel-debug" class="panel">
+  <div class="card">
+    <div class="field"><label>Error message <span class="req">required</span></label><textarea class="mono" id="derr" placeholder="Paste error — API 400/504, JSON parse failed, AbortError, truncation..."></textarea></div>
+    <div class="field"><label>Context (optional)</label><textarea id="dctx" placeholder="Which phase? What inputs? What were you doing?"></textarea></div>
+    <div class="btn-row">
+      <button class="primary" id="dbtn" onclick="runDiag()"><span id="dbtxt">Diagnose error</span></button>
+      <button onclick="loadSample()">Load sample</button>
+      <button onclick="clearDebug()">Clear</button>
+    </div>
+  </div>
+  <div class="status" id="dstatus"></div>
+  <div id="diag-out"></div>
+</div>
+</div>
+
+<script>
+const PHASES = {
+  "1":{title:"Narrative Foundation",endpoint:"/api/1",sections:[
+    {id:"positioning_statement",l:"Executive Positioning Statement"},
+    {id:"cco_track",l:"CCO Track Positioning"},
+    {id:"cos_track",l:"CoS Track Positioning"},
+    {id:"value_pillar_1",l:"Value Pillar 1"},{id:"value_pillar_2",l:"Value Pillar 2"},
+    {id:"value_pillar_3",l:"Value Pillar 3"},{id:"value_pillar_4",l:"Value Pillar 4"}
+  ]},
+  "2":{title:"LinkedIn Brand Refresh",endpoint:"/api/2a",sections:[
+    {id:"li_headline",l:"LinkedIn Headline",single:true},
+    {id:"li_about",l:"About Section"},
+    {id:"li_experience_reframe",l:"Experience Reframe Guidance"},
+    {id:"content_pillar_framework",l:"Content Pillar Framework"},
+    {id:"posting_cadence",l:"Posting Cadence",single:true},
+    {id:"content_calendar_30",l:"30-Day Content Calendar"},
+    {id:"cco_topics",l:"CCO Topics to Own"},{id:"cos_topics",l:"CoS Topics to Own"},
+    {id:"thought_leaders",l:"Thought Leaders to Follow"},
+    {id:"target_companies_li",l:"Target Companies to Monitor"}
+  ]},
+  "3":{title:"Visual & Executive Presence",endpoint:"/api/3",sections:[
+    {id:"headshot_brief",l:"Headshot Shoot Brief"},
+    {id:"wardrobe_guidance",l:"Wardrobe & Tone Guidance"},
+    {id:"banner_direction",l:"LinkedIn Banner Creative Direction"},
+    {id:"messaging_templates",l:"LinkedIn Messaging Templates"}
+  ]},
+  "4":{title:"Search Strategy",endpoint:"/api/4",sections:[
+    {id:"icp_profile",l:"Ideal Company Profile (ICP)"},
+    {id:"target_company_list",l:"Target Company List (20-25)"},
+    {id:"exec_search_firms",l:"Executive Search Firms"},
+    {id:"recruiter_brief",l:"Recruiter-Ready Brief"},
+    {id:"plan_30",l:"Days 1-30 Action Plan"},
+    {id:"plan_60",l:"Days 31-60 Action Plan"},
+    {id:"plan_90",l:"Days 61-90 Action Plan"}
+  ]},
+  "5":{title:"Supporting Assets",endpoint:"/api/5",sections:[
+    {id:"resume_gap_audit",l:"Resume Gap Audit"},
+    {id:"executive_bio",l:"Executive Bio (third person)"},
+    {id:"brand_one_pager",l:"Personal Brand One-Pager"}
+  ]}
+};
+
+let selectedPhases = new Set(["1"]);
+let completedData = {};
+let clientData = {};
+
+function togglePhase(n){
+  const btn=document.getElementById("pb-"+n);
+  if(btn.classList.contains("done")) return;
+  if(selectedPhases.has(n)){selectedPhases.delete(n);btn.classList.remove("sel");}
+  else{selectedPhases.add(n);btn.classList.add("sel");}
+}
+function selectAll(){["1","2","3","4","5"].forEach(n=>{selectedPhases.add(n);const b=document.getElementById("pb-"+n);if(!b.classList.contains("done"))b.classList.add("sel");});}
+function markRunning(n){const b=document.getElementById("pb-"+n);b.classList.remove("sel");b.classList.add("running");}
+function markDone(n){const b=document.getElementById("pb-"+n);b.classList.remove("running","sel");b.classList.add("done");}
+
+async function runSelected(){
+  const roles=document.getElementById("kr").value.trim();
+  const resume=document.getElementById("km").value.trim();
+  if(!roles||!resume){setSt("kstatus","Target roles and resume are required.","err");return;}
+  clientData={name:document.getElementById("kn").value.trim(),roles,linkedin:document.getElementById("kl").value.trim(),resume};
+  const btn=document.getElementById("kbtn"),lbl=document.getElementById("kbtxt");
+  btn.disabled=true;lbl.innerHTML='<span class="spin"></span>Running...';
+  const toRun=["1","2","3","4","5"].filter(n=>selectedPhases.has(n));
+  for(const n of toRun){
+    markRunning(n);
+    setSt("kstatus","Running Phase "+n+": "+PHASES[n].title+"...","info");
+    try{
+      const data = n==="2" ? await runPhase2() : await runPhase(n);
+      completedData[n]=data;
+      renderOutput(n,data);
+      markDone(n);
+      selectedPhases.delete(n);
+    }catch(err){
+      setSt("kstatus","Phase "+n+" failed: "+err.message,"err");
+      document.getElementById("pb-"+n).classList.remove("running");
+      document.getElementById("pb-"+n).classList.add("sel");
+      autoDebug(err.message,n);
+      break;
+    }
+  }
+  const rem=["1","2","3","4","5"].filter(n=>selectedPhases.has(n));
+  if(rem.length===0&&Object.keys(completedData).length>0) setSt("kstatus","All phases complete — download each document below.","ok");
+  btn.disabled=false;lbl.textContent="Run selected phases";
+}
+
+const PHASE_CONFIGS = {
+  "1": {
+    system: "You are an executive branding specialist at JazzyResumes. Return only valid JSON.",
+    prompt: (d) => `You are a senior executive branding consultant at JazzyResumes. Incisive, polished C-suite coach tone.
+CLIENT: ${d.name||"Executive candidate"} | ROLES: ${d.roles}
+LINKEDIN: ${d.linkedin||"Not provided"}
+RESUME: ${d.resume}
+Return ONLY raw JSON:
+{"positioning_statement":"3-4 sentence exec positioning. Who they are, problem they solve, why right now.","cco_track":"2-3 sentences. CCO: CX vision, retention, loyalty, NPS.","cos_track":"2-3 sentences. CoS: executive leverage, org orchestration, cross-functional alignment.","value_pillar_1":"Pillar name: 1-sentence from actual results.","value_pillar_2":"Pillar name: 1-sentence.","value_pillar_3":"Pillar name: 1-sentence.","value_pillar_4":"Pillar name: 1-sentence."}`
+  },
+  "3": {
+    system: "You are an executive presence consultant at JazzyResumes. Return only valid JSON.",
+    prompt: (d) => `You are an executive presence consultant at JazzyResumes.
+CLIENT: ${d.name||"Executive candidate"} | ROLES: ${d.roles}
+POSITIONING: ${d.positioning||"Senior executive targeting CCO and CoS"}
+Return ONLY raw JSON:
+{"headshot_brief":"Shoot brief: backdrop, lighting, posture, expression. Formal and approachable outputs.","wardrobe_guidance":"Wardrobe aligned to brand. Color palette, attire style, what to avoid.","banner_direction":"LinkedIn banner: background, text elements, motifs, overall tone.","messaging_templates":"5 LinkedIn templates: cold connect, follow-up, recruiter response, dormant network, board/CHRO outreach."}`
+  },
+  "4": {
+    system: "You are a retained executive search strategist at JazzyResumes. Return only valid JSON.",
+    prompt: (d) => `You are a retained executive search strategist at JazzyResumes.
+CLIENT: ${d.name||"Executive candidate"} | ROLES: ${d.roles}
+RESUME: ${d.resume} | POSITIONING: ${d.positioning||"Senior executive targeting CCO and CoS"}
+Return ONLY raw JSON:
+{"icp_profile":"Ideal company profile: size, stage, sectors, what to avoid.","target_company_list":"20-25 named companies. Name, why it fits, which track.","exec_search_firms":"3-5 boutique search firms. Name, specialty, how to approach.","recruiter_brief":"4-6 sentence recruiter-ready brief.","plan_30":"Days 1-30 weekly milestones.","plan_60":"Days 31-60 weekly milestones.","plan_90":"Days 61-90 weekly milestones."}`
+  },
+  "5": {
+    system: "You are a senior resume strategist at JazzyResumes. Return only valid JSON.",
+    prompt: (d) => `You are a senior resume strategist at JazzyResumes.
+CLIENT: ${d.name||"Executive candidate"} | ROLES: ${d.roles}
+RESUME: ${d.resume} | POSITIONING: ${d.positioning||"See resume"} | LINKEDIN ABOUT: ${d.li_about||"See resume"}
+Return ONLY raw JSON:
+{"resume_gap_audit":"Gap audit: specific misalignments with fix recommendations.","executive_bio":"200-250 word third-person executive bio. Formal, authoritative.","brand_one_pager":"One-pager: tagline, 3-sentence summary, 4 value pillars, target roles, 3-4 metrics wins, LinkedIn CTA."}`
+  }
+};
+
+async function runPhase(n){
+  const cfg = PHASE_CONFIGS[n];
+  const d = {
+    ...clientData,
+    positioning: completedData["1"]?.positioning_statement,
+    li_about: completedData["2"]?.li_about
+  };
+  const json = await callProxy({
+    phase: n,
+    prompt: cfg.prompt(d),
+    system: cfg.system,
+    max_tokens: 2048
+  }, n);
+  return safeParse(json.text);
+}
+
+async function runPhase2(){
+  setSt("kstatus","Phase 2: LinkedIn Profile + Content Strategy (parallel calls)...","info");
+  const positioning = completedData["1"]?.positioning_statement;
+  const d = { ...clientData, positioning };
+
+  const json = await callProxy({
+    phase: "2",
+    system1: "You are a LinkedIn brand strategist at JazzyResumes. Return only valid JSON.",
+    prompt1: `You are a senior LinkedIn profile strategist at JazzyResumes.
+CLIENT: ${d.name||"Executive candidate"} | ROLES: ${d.roles}
+LINKEDIN: ${d.linkedin||"Not provided"} | RESUME: ${d.resume}
+POSITIONING: ${d.positioning||"See resume"}
+Return ONLY raw JSON:
+{"li_headline":"LinkedIn headline under 220 chars for CCO and CoS searchability.","li_about":"Full LinkedIn About rewrite. First-person leader voice. 4-6 paragraphs.","li_experience_reframe":"Guidance rewriting 3-4 roles with before/after examples."}`,
+    system2: "You are a LinkedIn content strategist at JazzyResumes. Return only valid JSON.",
+    prompt2: `You are a senior LinkedIn content strategist at JazzyResumes.
+CLIENT: ${d.name||"Executive candidate"} | ROLES: ${d.roles}
+POSITIONING: ${d.positioning||"Senior executive targeting CCO and CoS"}
+Return ONLY raw JSON:
+{"content_pillar_framework":"4 content pillars. Each: name, purpose, 2 post angles.","posting_cadence":"Realistic weekly cadence.","content_calendar_30":"30-day calendar. One entry per line: Week X Day Y: [Topic] [Format]","cco_topics":"5-7 CCO topic territories.","cos_topics":"5-7 CoS topic territories.","thought_leaders":"8-10 specific thought leaders. Name and why.","target_companies_li":"10-12 companies to monitor."}`,
+    max_tokens: 2048
+  }, "2");
+
+  return { ...safeParse(json.text1), ...safeParse(json.text2) };
+}
+
+/**
+ * callProxy — single fetch to /api/proxy, returns parsed data.
+ * No SSE, no streaming, no edge functions. Simple and bulletproof.
+ */
+async function callProxy(phasePayload, label) {
+  const MAX = 3;
+  for (let a = 1; a <= MAX; a++) {
+    try {
+      const res = await fetch("/api/proxy", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(phasePayload)
+      });
+
+      // Detect raw HTML error pages (504 etc)
+      const contentType = res.headers.get("content-type") || "";
+      if (!contentType.includes("application/json")) {
+        const t = await res.text();
+        if (t.includes("Inactivity Timeout") || t.includes("504") || t.trim().startsWith("<")) {
+          throw new Error("Gateway timeout (504). Check Netlify function logs.");
+        }
+        throw new Error("Non-JSON response (HTTP " + res.status + "): " + t.slice(0, 150));
+      }
+
+      const json = await res.json();
+      if (!res.ok || json.ok === false) throw new Error(json.error || "Phase " + label + " returned error");
+      return json;
+    } catch (err) {
+      const retryable = /504|502|503|timeout|fetch|network/i.test(err.message);
+      if (retryable && a < MAX) {
+        const w = 2000 * Math.pow(2, a - 1);
+        setSt("kstatus", `Phase ${label} retry ${a}/${MAX} in ${w/1000}s...`, "warn");
+        await sleep(w);
+        continue;
+      }
+      throw err;
+    }
+  }
+}
+
+function renderOutput(n,data){
+  const ph=PHASES[n],c=document.getElementById("out-"+n);
+  c.className="phase-out show";
+  const p=document.createElement("div");p.className="pp";
+  const h=document.createElement("div");h.className="pp-hdr";
+  h.innerHTML=`<div class="pp-badge">✓</div><div class="pp-title">Phase ${n}: ${ph.title}</div><div class="pp-acts"><button class="success" onclick="downloadDoc('${n}')">⬇ Download doc</button><button onclick="copyPhase('${n}')">Copy</button></div>`;
+  const b=document.createElement("div");b.className="pp-body";
+  ph.sections.forEach(s=>{
+    const v=(data&&data[s.id])?data[s.id]:"";
+    const d=document.createElement("div");d.className="sec";
+    d.innerHTML=`<label>${s.l}</label><textarea class="ef${s.single?" single":""}" id="ef-${n}-${s.id}">${esc(v)}</textarea>`;
+    b.appendChild(d);
+  });
+  p.appendChild(h);p.appendChild(b);c.innerHTML="";c.appendChild(p);
+  // Scroll to newly completed phase
+  setTimeout(()=>c.scrollIntoView({behavior:"smooth",block:"start"}),100);
+}
+
+function downloadDoc(n){
+  const ph=PHASES[n],client=clientData.name||"Executive";
+  let txt=`JAZZY RESUMES — EXECUTIVE BRANDING KIT\nClient: ${client} | Roles: ${clientData.roles||"—"}\nGenerated: ${new Date().toLocaleDateString()}\n${"=".repeat(60)}\nPHASE ${n}: ${ph.title.toUpperCase()}\n${"=".repeat(60)}\n\n`;
+  ph.sections.forEach(s=>{const el=document.getElementById("ef-"+n+"-"+s.id);if(el)txt+=`${s.l.toUpperCase()}\n${el.value}\n\n`;});
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(new Blob([txt],{type:"text/plain"}));
+  a.download=`JazzyResumes_Phase${n}_${client.replace(/\s+/g,"_")}_${new Date().toISOString().slice(0,10)}.txt`;
+  a.click();
+}
+
+function copyPhase(n){
+  const ph=PHASES[n];let out=`PHASE ${n}: ${ph.title.toUpperCase()}\n\n`;
+  ph.sections.forEach(s=>{const el=document.getElementById("ef-"+n+"-"+s.id);if(el)out+=`${s.l.toUpperCase()}\n${el.value}\n\n`;});
+  navigator.clipboard.writeText(out);
+}
+
+function copyAllCompleted(){
+  let out=`JAZZY RESUMES — EXECUTIVE BRANDING KIT\nClient: ${clientData.name||"—"} | Roles: ${clientData.roles||"—"}\nGenerated: ${new Date().toLocaleDateString()}\n\n`;
+  Object.keys(completedData).sort().forEach(n=>{
+    const ph=PHASES[n];out+=`\n${"=".repeat(60)}\nPHASE ${n}: ${ph.title.toUpperCase()}\n${"=".repeat(60)}\n\n`;
+    ph.sections.forEach(s=>{const el=document.getElementById("ef-"+n+"-"+s.id);if(el)out+=`${s.l.toUpperCase()}\n${el.value}\n\n`;});
+  });
+  navigator.clipboard.writeText(out);
+}
+
+function resetAll(){
+  completedData={};selectedPhases=new Set(["1"]);
+  ["1","2","3","4","5"].forEach(n=>{
+    const b=document.getElementById("pb-"+n);
+    b.className=n==="1"?"pb sel":"pb";
+    const pn=b.querySelector(".pn");if(pn)pn.textContent=n;
+    document.getElementById("out-"+n).className="phase-out";
+    document.getElementById("out-"+n).innerHTML="";
+  });
+  document.getElementById("kstatus").className="status";
+  ["kn","kr","kl","km"].forEach(id=>document.getElementById(id).value="");
+}
+
+// ── Troubleshooter ────────────────────────────────────────────────────────────
+let sampleIdx=0;
+const SAMPLES=["API 504: Gateway timeout on Phase 2b","TRUNCATED_RESPONSE: JSON cut off at char 3891","Phase 2a error 500: ANTHROPIC_API_KEY not configured","AbortError: Phase 2 timed out after 55s","TypeError: Cannot read properties of undefined (reading 'positioning_statement')"];
+
+function autoDebug(msg,n){document.querySelectorAll(".tab")[1].click();document.getElementById("derr").value=msg;document.getElementById("dctx").value="Auto-captured from Phase "+n+" agent.";setSt("dstatus","Error from Phase "+n+" — click Diagnose.","err");}
+
+async function runDiag(){
+  const err=document.getElementById("derr").value.trim(),ctx=document.getElementById("dctx").value.trim();
+  if(!err){setSt("dstatus","Paste an error message first.","err");return;}
+  const btn=document.getElementById("dbtn"),lbl=document.getElementById("dbtxt");
+  btn.disabled=true;lbl.innerHTML='<span class="spin"></span>Diagnosing...';
+  setSt("dstatus","Sending to diagnostic agent...","info");
+  try{
+    const json = await callProxy({
+      phase: "diag",
+      prompt: `You are a senior engineer specializing in Netlify functions and Anthropic API integrations.\nERROR: ${errTxt}\nCONTEXT: ${ctx||"Not provided"}\nARCHITECTURE: Netlify standard function at /api/proxy, non-streaming JSON response, Phase 2 parallel via Promise.all.\nReturn ONLY raw JSON:\n{"severity":"critical|warning|info","error_type":"short label","root_cause":"2-3 sentences.","what_happened":"1-2 sentences.","fix_instructions":"Numbered steps with exact code.","fixed_snippet":"Code snippet or empty string.","prevention":"1 sentence.","confidence":"high|medium|low"}`,
+      system: "You are a senior API integration engineer. Return only valid JSON.",
+      max_tokens: 1024
+    }, "diag");
+    renderDiag(safeParse(json.text), errTxt);
+    setSt("dstatus","Diagnosis complete.","ok");
+  }catch(e){setSt("dstatus","Diagnostic error: "+e.message,"err");}
+  btn.disabled=false;lbl.textContent="Diagnose error";
+}
+
+function renderDiag(d,orig){
+  const out=document.getElementById("diag-out");
+  const sc=d.severity==="critical"?"bc":d.severity==="warning"?"bw":"bi";
+  const cc=d.confidence==="high"?"bg":d.confidence==="medium"?"bw":"bc";
+  out.innerHTML=`
+    <div class="card" style="margin-bottom:.75rem">
+      <div style="font-size:14px;font-weight:600;margin-bottom:8px">${esc(d.error_type||"Unknown")}<span class="badge ${sc}">${d.severity||"?"}</span><span class="badge ${cc}">${d.confidence||"?"} confidence</span></div>
+      <div class="sep"></div><label style="margin-bottom:4px">Original error</label>
+      <div class="cbox">${esc(orig)}</div>
+    </div>
+    ${mkD("Root cause","1","ir",`<p>${esc(d.root_cause||"")}</p>`,true)}
+    ${mkD("What happened","2","ia",`<p>${esc(d.what_happened||"")}</p>`,false)}
+    ${mkD("How to fix","3","ig",fmtFix(d.fix_instructions,d.fixed_snippet),true)}
+    ${mkD("Prevention","4","ib",`<p>${esc(d.prevention||"")}</p>`,false)}`;
+}
+function mkD(t,n,ic,c,o){return `<div class="db"><div class="db-hdr" onclick="tog(this)"><div class="di ${ic}">${n}</div><div class="db-title">${t}</div><div class="chev ${o?"open":""}">▼</div></div><div class="db-body ${o?"open":""}">${c}</div></div>`;}
+function fmtFix(i,s){let h=`<p>${esc(i||"").replace(/\n/g,"</p><p>")}</p>`;if(s&&s.trim())h+=`<div class="sep"></div><label style="margin-bottom:4px">Corrected code</label><div class="cbox">${esc(s)}</div>`;return h;}
+function tog(h){h.nextElementSibling.classList.toggle("open");h.querySelector(".chev").classList.toggle("open");}
+function loadSample(){document.getElementById("derr").value=SAMPLES[sampleIdx%SAMPLES.length];sampleIdx++;}
+function clearDebug(){document.getElementById("derr").value="";document.getElementById("dctx").value="";document.getElementById("diag-out").innerHTML="";document.getElementById("dstatus").className="status";}
+
+
+// Safe JSON parse with truncation detection
+function safeParse(raw) {
+  if (!raw) throw new Error("Empty response from agent");
+  const clean = raw.replace(/^```json\s*/, "").replace(/\s*```$/, "").trim();
+  try { return JSON.parse(clean); } catch {}
+  const m = clean.match(/\{[\s\S]*\}/);
+  if (m) { try { return JSON.parse(m[0]); } catch {} }
+  if (!clean.endsWith("}")) throw new Error("TRUNCATED_RESPONSE: JSON cut off at char " + clean.length);
+  throw new Error("JSON_PARSE_FAILED. Raw: " + clean.slice(0, 200));
+}
+
+function switchTab(tab,el){document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));document.querySelectorAll(".panel").forEach(p=>p.classList.remove("active"));el.classList.add("active");document.getElementById("panel-"+tab).classList.add("active");}
+function setSt(id,msg,type){const el=document.getElementById(id);el.textContent=msg;el.className="status show "+(type||"info");}
+function sleep(ms){return new Promise(r=>setTimeout(r,ms));}
+function esc(s){return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+</script>
+</body>
+</html>
